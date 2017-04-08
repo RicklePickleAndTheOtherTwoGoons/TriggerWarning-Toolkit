@@ -1,5 +1,5 @@
-
-#LoadCard loads the specified decks 
+#!/usr/local/bin/python
+#LoadCard loads Main Deck given its filename 
 import csv
 import requests
 import sys
@@ -9,9 +9,10 @@ class card:                                     #card object
         self.draw = 0                           #draw value if applicable
         self.pick = 0                           #pick value if applicable
         self.cType = "ERROR"                         #card type (required)
-filenames = ['MainCH.tsv']
-for fname in filenames:
-    with open(fname) as tsvfile:
+filenames = str(sys.argv[1])
+print(filenames)
+if 1 == 1:
+    with open(filenames) as tsvfile:
         tsvreader = csv.reader(tsvfile, delimiter="\t")
         cardSet = [] 
         for row in tsvreader:                        #iterates through lines
@@ -37,7 +38,7 @@ for fname in filenames:
                     cardSet.append(newCard)         #add card to list
     #create card set and get ID
         print(len(cardSet))                         #520
-        r = requests.post("https://triggerwarning.herokuapp.com/api/cardsets", data = {'name': fname}, files = dict(foo = 'bar'))
+        r = requests.post("https://triggerwarning.herokuapp.com/api/cardsets", data = {'name': filenames}, files = dict(foo = 'bar'))
         response = (r.text).split('id":"')
         cardSetID = response[1][0:24]
         for p in cardSet:                           #iterate through all cards
