@@ -10,8 +10,7 @@ class card:                                     #card object
         self.pick = 0                           #pick value if applicable
         self.cType = "ERROR"                         #card type (required)
 filenames = str(sys.argv[1])
-print(filenames)
-if 1 == 1:
+if ".tsv" in filenames:
     with open(filenames) as tsvfile:
         tsvreader = csv.reader(tsvfile, delimiter="\t")
         cardSet = [] 
@@ -37,12 +36,12 @@ if 1 == 1:
                     newCard.cType = "white"         #responses are white    
                     cardSet.append(newCard)         #add card to list
     #create card set and get ID
-        print(len(cardSet))                         #520
+        print("Loading in ", len(cardSet), "cards.")                         #550
         r = requests.post("https://triggerwarning.herokuapp.com/api/cardsets", data = {'name': filenames}, files = dict(foo = 'bar'))
         response = (r.text).split('id":"')
         cardSetID = response[1][0:24]
         for p in cardSet:                           #iterate through all cards
-            data = {
+            data = {                                #set variables for upload
                 'text' : p.text,
                 'draw' : p.draw,
                 'pick' : p.pick,
@@ -57,3 +56,6 @@ if 1 == 1:
             #save id from cardset
             #for each card create card to api cards and add card to cardset
     tsvfile.close()
+else:
+    print("ERROR: file has wrong type or was not provided please download a\n\t .tsv of the main deck and pass it as the argument")
+
